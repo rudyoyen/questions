@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<script>
+		var a = "apple";
+
+		function whatIsA () {
+			console.log(this.a);
+		}
+
+		whatIsA();
+
+
+		/*** Example of strict mode not allowing the global object to be 'this' in a function ***/
+		//in other words the global object is not eligible for the default binding, so 'this' is set to undefined
+		var b = "bot";
+
+		function whatIsB () {
+			//NOTE: "use strict" only prevents the default binding on the global object if the contents of
+			//whatIsB are running in strict mode
+			//if only the call site of what isB is running in strict mode, that will not make a difference
+			"use strict";	
+			console.log(this.b);
+		}
+
+		whatIsB();	//cannot read property 'b' of undefined, ie 'this' is undefined as the global object
+	</script>
+<head>
+	<title>Default Binding</title>
+</head>
+<body>
+
+</body>
+</html>

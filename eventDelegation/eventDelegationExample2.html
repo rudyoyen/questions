@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		.active {
+			background-color: yellow;
+		}
+	</style>
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+
+			var toolbar = document.querySelector(".toolbar");
+
+			var delegate = function(criteria, listener) {
+			  return function(e) {
+			    var el = e.target;
+			    do {
+			      //test if the target element passes the criteria
+			      if (!criteria(el)) continue; //if it doesn't pass criteria, skip code below and go to while statement
+			      //if it does pass the criteria, create a new property 'delegateTarget' and set it to the element
+			      e.delegateTarget = el;
+			      //call the handler for this element and pass in the same arguments that we were passed by addEventListener
+			      //arguments contains e as the first element in the array-like list, so it has e.delegateTarget
+			      listener.apply(this, arguments);	
+			      //break out of while loop
+			      return;
+
+			      //if the criteria doesn't pass, then walk up the DOM by reassigning el to el.parentNode
+			      //each assignmennt will return the value of el.parentNode, so as long as el.parentNode is defined,
+			      //the statement will evaluate to true. Once el is the '#document' object, the '#document' object doesn't have
+			      //a parent node, so el.parentNode is null and the statement returns null, which evaluates to false and the while
+			      //loop is broken 
+			    } while( (el = el.parentNode) );
+			  };
+			};
+			var buttonsFilter = function(elem) { return elem.classList && elem.classList.contains("btn"); };
+			var buttonHandler = function(e) {
+			  var button = e.delegateTarget;
+			  if (!button.classList.contains("active"))
+			    button.classList.add("active");
+			  else
+			    button.classList.remove("active");
+			};
+
+			toolbar.addEventListener("click", delegate(buttonsFilter, buttonHandler));
+
+		});
+	</script>
+	<title>solution</title>
+</head>
+<body>
+	<ul class="toolbar">
+	  <li><button class="btn"><i class="fa fa-pencil"></i> Pencil</button></li>
+	  <li><button class="btn"><i class="fa fa-paint-brush"></i> Pen</button></li>
+	  <li class="separator"></li>
+	  <li><button class="btn"><i class="fa fa-eraser"></i> Eraser</button></li>
+	</ul>
+</body>
+</html>

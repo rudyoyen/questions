@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		.active {
+			background-color: yellow;
+		}
+	</style>
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			var buttons = document.querySelectorAll(".toolbar button");
+
+
+			/*APPROACH #4 - Best approach
+			This is ideal because we don't have any more loops which also means we don't
+			need to store a handler on every element. This would be very beneficial if we had 1,000
+			buttons. 
+
+			We are taking advantage of events bubbling and the idea of event delegation. 
+			Delegated events - events that are attached to a parent element, but only get executed
+			when the target of the event matches some criteria
+
+			*/
+			var toolbar = document.querySelector(".toolbar");
+			toolbar.addEventListener("click", function(e) {
+
+				console.log("target", e.target);
+				console.log("currentTarget", e.currentTarget);
+				/*we use target here because target is the actual target of the event. Where the event is trying to get
+				to or where it came from in the DOM. In other words the target is the element that triggers the event.
+				currentTarget, on the other hand, is the element that is currently handling the event. In this case the
+				currentTarget would be the UL.toolbar.
+				*/
+			 	var button = e.target;
+			 	if(!button.classList.contains("active"))
+			    	button.classList.add("active");
+			  	else
+			    	button.classList.remove("active");
+			});
+
+
+
+			/*APPROACH #3 - Works correctly but not ideal
+			We can use the currentTarge property on event object, e, so we don't need to use a closure
+			to store the correct reference to the button variable. We can simply look at which target
+			was clicked.
+
+			This approach is much better than #2 but what if we had 1,000 buttons? We would be storing a callback
+			function on each element. Which will work, but there's actually a better solution in #4 where
+			we only need to attach one handler. 
+			
+			var toolbarButtonHandler = function(e) {
+				//e.currentTarget is the element that is currently being processed
+				//as the event capturing and bubbling occurs, this value changes
+				var button = e.currentTarget;
+				if(!button.classList.contains("active"))
+					button.classList.add("active");
+				else
+					button.classList.remove("active");
+			};
+
+			for(var i = 0; i < buttons.length; i++) {
+			 	buttons[i].addEventListener("click", toolbarButtonHandler);
+			}
+			*/
+
+
+			/*APPROACH #2 - Works correctly but not ideal
+			We use the idea of a closure here in order to have the button variable correctly point
+			at the element we intended. 
+			Because the addOrRemoveActive function returned will still have access to the variables defined outside of it
+			when the function is declared (in this case the parameter 'button'), when addOrRemoveActive is called it will point 
+			the value of 'button' when it was defined. 
+			To illustrate this, we've created a time stamp stored in a variable each time createToolbarButtonHanlder is called
+			The variable 'time' is created again each time the function is called and therefore stores a different value each time.
+			Similarly 'button' is created each time createToolbarButtonHandler and therefore store as unique value each time.
+			
+			This approach works but we have to create a separte inner function in order to preserver the scope for 'button'
+
+			var createToolbarButtonHandler = function(button) {
+			  function addOrRemoveActive() {
+			  	var currentTime = = new Date().getMilliseconds();
+			  	console.log("stored time is ", time);
+
+			    if(!button.classList.contains("active"))
+			      button.classList.add("active");
+			    else
+			      button.classList.remove("active");
+			  };
+
+			  var time = new Date().getMilliseconds();
+			  console.log("time at declaration", time);
+
+			  return addOrRemoveActive;
+			};
+
+			for(var i = 0; i < buttons.length; i++) {
+			  buttons[i].addEventListener("click", createToolbarButtonHandler(buttons[i]));
+			}
+			*/
+
+			/*APPROACH #1 - Incorrect
+			Problem is that button keeps getting reassigned at the start of every iteration of the loop
+			When the loop starts, it correctly adds a listener on to the first button element, Pencil
+			But when i is incremented to 1, button is reassigned to Pen. Pen has a listener correctly added
+			but when a user clicks on Pencil now, the variable 'button' is now pointing at Pen, so the code
+			will end up adding the "active" class to the Pen element. 
+			At the end of the loop, the variable button is left pointing at the Eraser element. So even though
+			all elements correctly have listeners added to them, when a user clicks on them and the handler is 
+			triggered, button will point to Eraser so the "active" class will always get added to Eraser.
+			
+			for(var i = 0; i < buttons.length; i++) {
+			  var button = buttons[i];
+			  button.addEventListener("click", function() {
+			  	console.log("button", button.innerHTML,"was clicked"); //will always say "button Eraser was clicked"
+			    if(!button.classList.contains("active"))
+			      button.classList.add("active");
+			    else
+			      button.classList.remove("active");
+			  });
+			}
+			*/
+			
+		});
+	</script>
+	<title>solution</title>
+</head>
+<body>
+	<ul class="toolbar">
+	  <li><button class="btn">Pencil</button></li>
+	  <li><button class="btn">Pen</button></li>
+	  <li><button class="btn">Eraser</button></li>
+	</ul>
+</body>
+</html>

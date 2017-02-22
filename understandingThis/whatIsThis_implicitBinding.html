@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<script>
+	/*
+		//Example of implicit binding
+		(function() {
+			
+			var obj = {
+				a: 2,
+				foo: foo
+			}
+
+			function foo() {
+				console.log(this.a);
+			}
+
+			//example of how the call site matters for determing what 'this' is
+			obj.foo(); //2, 'this' is 'obj'
+			foo();	//undefined, 'this' is the global object, which doesn't have a property 'a'
+		})();
+		
+
+		//Example of priority of objects in implicit binding
+		(function() {
+			function foo() {
+				console.log(this.a);
+			}
+
+			var obj2 = {
+				a: 42,
+				foo: foo
+			};
+
+			var obj1 = {
+				a: 2,
+				obj2: obj2
+			};
+
+			//in a reference chain, 'this' will refer to only the highest level, it does not flow down 
+			//to the lowest level
+			obj1.obj2.foo(); //42
+
+		})();
+*/
+		(function(){
+			console.log(a);
+			function foo() {
+				console.log(a);
+			    console.log( this.a );
+			}
+
+			var obj = {
+			    a: 2,
+			    foo: foo
+			};
+
+			var bar = obj.foo; // function reference/alias!
+
+			var a = "oops, global"; // `a` also property on global object
+
+			console.log(a);
+			bar(); // "oops, global"
+		})();
+
+/*
+		//Example #1 of implicit binding getting lost 
+		(function() {
+
+			var a = "oops, global";
+
+			function foo() {
+				console.log(this.a);
+			}
+
+			var obj = {
+				a: 2,
+				foo: foo
+			};
+
+			var bar = obj.foo; //bar is not actually a reference to obj.foo, it is just another reference to foo
+
+			
+
+			bar(); //"oops, global"
+		})();
+
+		//Example #2 of implicit binding getting lost 
+		(function() {
+			function foo() {
+				console.log(this.a);
+			}
+
+			function doFoo(fn) {
+				fn();
+			}
+
+			var obj = {
+				a: 2,
+				foo: foo
+			};
+
+			var a = "oops, global";
+
+			//parameter passing is just an implicit assignment, so since we're passing in a function, 
+			//it's an implicit reference assignment (fn is actually pointing to foo, not obj.foo), the same as example #1
+			doFoo(obj.foo); //"oops, global"
+		})();
+
+*/
+	</script>
+<head>
+	<title>Implicit Binding</title>
+</head>
+<body>
+
+</body>
+</html>
