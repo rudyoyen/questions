@@ -85,10 +85,29 @@ Consider HTML5 as an open web platform. What are the building blocks of HTML5?
 	-JavaScript API
 	-Geolocation API
 	-Web Worker API
-	-Data storage
+	-Data storage (sessionStorage and localStorage)
+
 
 
 Describe the difference between a cookie, sessionStorage and localStorage.
+
+	Cookie - A small piece of data that the server sends to the browser. The browser may store it and send it back together with the next request to the same server. It's mainly used to know if two requests came from the same browser to rememebr stateful information in a stateless HTTP protocol. Examples of cookies:
+		-session management (user logins, shopping carts)
+		-personalization (user preferences)
+		-tracking (analyzing user behavior)
+
+	Since cookies are sent along with every request, they should not be used for general storage as it will have an impact on performance. For general storage, sessionStorage and localStorage should be used. A max of 4KB can be stored in a cookie.
+
+	sessionStorage and localStorage are very similar except:
+	 sessionStorage gets cleared when the page session ends (either tab is closed or window is closed). The sessionStorage does not get cleared on a reload or even if you navigate away from that page and then back to it as long as the tab or window isn't closed. Opening a page in a new tab or window will cause the new session to be initiated - This is different than how a cookie works.
+	 localStorage never gets cleared unless the user decides to delet it.
+
+	Example of localStorage:
+		-store data locally that takes a long time to retrieve from the server. You will have to wait the first time, but subsequent views of the page will not have to wait.
+		-save state of an app without requiring a user to log in
+
+	Be careful of security cocerns with localStorage and sessionStorage. You could log off of a website but still have sensitive info stored in sessionStorage or localStorage.
+
 Describe the difference between <script>, <script async> and <script defer>.
 Why is it generally a good idea to position CSS <link>s between <head></head> and JS <script>s just before </body>? Do you know any exceptions?
 	
