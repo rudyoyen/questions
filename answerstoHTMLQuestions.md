@@ -51,6 +51,8 @@ BD Question - What does the browser do when it encounters a script tag? (Parser 
 	Adding the async keyword to the script tag will tell the browser to continue constructing the DOM while the contents of the script are fetched. NOTE, this only works if the script has an external reference. Adding async to a an inline script will have no effect. 
 	BD NOTE - I assume this means the async keyword only allows the fetching of the content to happen asynchronously but the execution of the contents of the JS file will still pause the DOM construction. 
 
+	Another option is <script defer>. This defers the execution of the script until the HTML is parsed all other resources are loaded but before DOMContentLoaded is fired. The benefit would be that the visible content loads faster but there are reports that the defer behaves differently in different browsers and is not completely reliable. 
+
 
 BD Question - What does the browser do when it encounters a style tag? (Render Blocking)
 
@@ -89,6 +91,7 @@ Consider HTML5 as an open web platform. What are the building blocks of HTML5?
 
 
 
+
 Describe the difference between a cookie, sessionStorage and localStorage.
 
 	Cookie - A small piece of data that the server sends to the browser. The browser may store it and send it back together with the next request to the same server. It's mainly used to know if two requests came from the same browser to rememebr stateful information in a stateless HTTP protocol. Examples of cookies:
@@ -108,20 +111,30 @@ Describe the difference between a cookie, sessionStorage and localStorage.
 
 	Be careful of security cocerns with localStorage and sessionStorage. You could log off of a website but still have sensitive info stored in sessionStorage or localStorage.
 
-Describe the difference between <script>, <script async> and <script defer>.
-Why is it generally a good idea to position CSS <link>s between <head></head> and JS <script>s just before </body>? Do you know any exceptions?
-	
 
 What is progressive rendering?
 
+	The browser should display whatever content it has as soon as possible.
 
+BD Question - What's the benefit of a CDN (Content Delivery Network)?
+	
+	Performance - Content can be cached or pre-saved on CDN servers closest to the client making the request. This can greatly reduce the load time if the origin server is located much farther away (other side of the world) compared to a close CDN server (same city).
+	If the content is not cached, the request can travel a lot faster traversing the network of CDN servers.
+
+	Availability - Having a distributed network also allows delivery of content on a consistent basis even at peak traffic times. Without CDN, all the traffic has to be absorbed by the provider's origin infrastructure. 
+
+
+Describe the difference between <script>, <script async> and <script defer>.
+
+	Question answered above regarding script loading.
+
+Why is it generally a good idea to position CSS <link>s between <head></head> and JS <script>s just before </body>? Do you know any exceptions?
+	
+	This prevents FOUC (flash of unstyled content). By placing link tags in the head it improves page load times and avoids the browser 
+	having to repaint the page when later stylesheets are downloaded (which was what causes FOUC).
+	
 
 Have you used different HTML templating languages before?
 
-
-BD Question - How does CSS and JS get loaded? What is the priority when the browser encounters each?
-	
-	When the browser encounters a script tag, it stops parsing the HTML and executes the contents of the script first. Once finished, it
-	continues parsing the HTML to build the DOM.
 
 
