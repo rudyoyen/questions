@@ -81,7 +81,7 @@ Internet Explorer 8 and older browsers instead show a download dialog box for un
 ### What kind of things must you be wary of when design or developing for multilingual sites?
 
 
-## What are data- attributes good for?
+### What are data- attributes good for?
 	
 They allow you as the developer to append propriety information to HTML elements that are not visible to the end user. You can store information about element like you would store properties on a JavaScript object. You can also access them in CSS and define CSS styles based on the value of a data attribute. Knockout uses data-bind and ScaleJS created data-class which are custom bindings to HTML elements. One thing to note though, is that the performance of reading data-attributes compared to storing data in JS objects is poor. 
 
@@ -101,9 +101,9 @@ They allow you as the developer to append propriety information to HTML elements
 ### Describe the difference between a cookie, sessionStorage and localStorage.
 
 Cookie - A small piece of data that the server sends to the browser. The browser may store it and send it back together with the next request to the same server. It's mainly used to know if two requests came from the same browser to rememebr stateful information in a stateless HTTP protocol. Examples of cookies:
-	* session management (user logins, shopping carts)
-	* personalization (user preferences)
-	* tracking (analyzing user behavior)
+* session management (user logins, shopping carts)
+* personalization (user preferences)
+* tracking (analyzing user behavior)
 
 Since cookies are sent along with every request, they should not be used for general storage as it will have an impact on performance. For general storage, sessionStorage and localStorage should be used. A max of 4KB can be stored in a cookie.
 
@@ -112,8 +112,8 @@ sessionStorage and localStorage are very similar except:
  localStorage never gets cleared unless the user decides to delet it.
 
 Example of localStorage:
-	* store data locally that takes a long time to retrieve from the server. You will have to wait the first time, but subsequent views of the page will not have to wait.
-	* save state of an app without requiring a user to log in
+* store data locally that takes a long time to retrieve from the server. You will have to wait the first time, but subsequent views of the page will not have to wait.
+* save state of an app without requiring a user to log in
 
 Be careful of security cocerns with localStorage and sessionStorage. You could log off of a website but still have sensitive info stored in sessionStorage or localStorage.
 
