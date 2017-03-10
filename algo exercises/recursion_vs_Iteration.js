@@ -7,7 +7,7 @@
     	let next = n-1;
 
     	console.log("calling production1NR(" + next + ");");
-    	let nextProduct = product1ToNR(n-1); 	
+    	let nextProduct = product1ToNR(next); 	
     	console.warn("exiting recursion from", next, " back to", n);
     	//console.log("next product is", nextProduct);
     	
@@ -28,8 +28,8 @@
  function product1ToN(n) {
     // we assume n >= 1
     console.warn("at top of function with n:", n);
-    var result = 1;
-    for (var num = 1; num <= n; num++) {
+    let result = 1;
+    for (let num = 1; num <= n; num++) {
     	console.log("num:", num, "n:", n);
         let product = result * num;
         console.log("calculating ", result, "*", num, "=>", product);
