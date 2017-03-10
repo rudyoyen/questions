@@ -11,7 +11,7 @@ Expert's defintion: Delegated events - events that are attached to a parent elem
 when the target of the event matches some criteria
 
 
-### Explain how this works in JavaScript
+### Explain how `this` works in JavaScript
 
 `this` is a binding made for each function invocation based entirely on how the function is being called. `this` will always be an object unless it is set to null or undefined. What exactly that object is, is determined by how the function is being called. 
 
@@ -23,25 +23,7 @@ When a function is called as a method attached to an object, the `this` of that 
 
 When a function is called using call or apply, the `this` of that function refers to the object passed in to call or apply.
 
-### What is the difference between == and ===?
-
-== is a loose or abstract comparison. === is a strict comparison. === is only true if the operands are of the same type
-and their contents match. == converts one or both of the operands to the same type and then compares their contents in the
-exact same way as === performs the comparison. For example when a string is loosely compared to a number, the string is first
-converted to a number and then compared by ===.  
-
-Some things that evaluate to false for == comparison:
--Anything compared the NaN
--Anything compared to null other than null or undefined
--Anything compared to undefined other than null or undefined
--Two objects with identical properties but the operands reference different objects
-
-Some things that evaluate to true for == comparison:
--false, 0, -0, "", "0", "-0", []
-
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Comparison_Operators
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness
-
+---
 
 Explain how prototypal inheritance works
 What do you think of AMD vs CommonJS?
@@ -69,10 +51,42 @@ What's the difference between an "attribute" and a "property"?
 Why is extending built-in JavaScript objects not a good idea?
 Difference between document load event and document DOMContentLoaded event?
 
+---
+
+### What is the difference between == and ===?
+
+== is a loose or abstract comparison. === is a strict comparison. === is only true if the operands are of the same type
+and their contents match. == converts one or both of the operands to the same type and then compares their contents in the
+exact same way as === performs the comparison. For example when a string is loosely compared to a number, the string is first
+converted to a number and then compared by ===.  
+
+Some things that evaluate to false for == comparison:
+-Anything compared the NaN
+-Anything compared to null other than null or undefined
+-Anything compared to undefined other than null or undefined
+-Two objects with identical properties but the operands reference different objects
+
+Some things that evaluate to true for == comparison:
+-false, 0, -0, "", "0", "-0", []
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Comparison_Operators
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness
+
+---
 
 Explain the same-origin policy with regards to JavaScript.
-Make this work:
-duplicate([1,2,3,4,5]); // [1,2,3,4,5,1,2,3,4,5]
+
+---
+
+### Make this work: `duplicate([1,2,3,4,5]); // [1,2,3,4,5,1,2,3,4,5]`
+
+`function duplicate (array) {
+	Array.prototype.push.apply(array, array);
+	return array;
+}`
+
+---
+
 Why is it called a Ternary expression, what does the word "Ternary" indicate?
 What is "use strict";? what are the advantages and disadvantages to using it?
 Create a for loop that iterates up to 100 while outputting "fizz" at multiples of 3, "buzz" at multiples of 5 and "fizzbuzz" at multiples of 3 and 5
