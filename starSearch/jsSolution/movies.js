@@ -12,6 +12,17 @@ function splitOnNewLine (text) {
 	return text.split("\n");
 }
 
+function removeReturnCharacters (text) {
+  return text.replace(/\r/gi, "");
+}
+
+function cleanData (data) {
+  //console.log(util.inspect(data));
+  //let newData = data.replace(/[\]/gi, "'");
+  //TODO refactor so you don't have to loop twice (first split on new line, then split on empty string)
+  return splitOnNewLine(removeReturnCharacters(data)); 
+}
+
 function findActorsMovies (name, movieData) {
 	const matchingMovies = [];
 	const actorsMovies = movieData.actors[name];
@@ -23,29 +34,40 @@ function findActorsMovies (name, movieData) {
   return matchingMovies;
 }
 
-fs.readFile(fileName, 'utf8', function(err, data) {
-  if (err) throw err;
-
-  //console.log(util.inspect(data));
-  //let newData = data.replace(/[\]/gi, "'");
-  let dataWithoutReturns = data.replace(/\r/gi, "");
-  //console.log(util.inspect(dataWithoutReturns));
-  let dataSplitByLine = splitOnNewLine(dataWithoutReturns); //TODO refactor so you don't have to loop twice (first split on new line, then split on empty string)
+function onMovieDataReceived (rawData) {
+  //CLEAN DATA
+  const unstructuredMovieData = cleanData(rawData);
   
-  const movieData = moviesSource.buildMoviesArray(dataSplitByLine, labels);
+  //PARSE DATA - BUILD MOVIE SCHEMA
+  const movieData = moviesSource.makeMovieAndStarSchema(unstructuredMovieData, labels);
 
-  let name = process.argv[2] + " " + process.argv[3];
-	let results = findActorsMovies(name, movieData);
+  //GET MATCHING MOVIES
+  const name = process.argv[2] + " " + process.argv[3];
+  const results = findActorsMovies(name, movieData);
 
-  let output = outputTemplate.getOutput(name, results);
+  //GET CORRECT FORMATTED OUTPUT
+  const output = outputTemplate.getOutput(name, results);
+
+  //DISPLAY OUTPUT
   console.log(output);
-});
+} 
 
-function add(a,b) {
-  return a + b;
+function readMovieSource (file, onSuccessCallback) {
+  fs.readFile(fileName, 'utf8', function(err, data) {
+    if (err) throw err;
+    onSuccessCallback(data);
+  });
 }
 
+function start (file, callback) {
+  readMovieSource(file, callback);
+}
+
+start(fileName, onMovieDataReceived);
+
 module.exports = {
-  add
+  splitOnNewLine,
+  cleanData,
+  removeReturnCharacters
 }
 

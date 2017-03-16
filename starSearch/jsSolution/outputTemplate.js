@@ -10,7 +10,15 @@ Also Starring: <Other Stars>
 
 //TODO write test for correctly printing output even if data is bad
 
-function otherActorsString (actor, allActors) {
+function getMovieTemplate(m) {
+	//Extremely ugly dedenting! This is unfortunately the only way to have it print correctly
+	//without using a third party library or using a polyfill of sorts
+	return `Title: ${m.title} (${m.releaseYear})
+Directed By: ${m.director}
+Also Starring: ${m.stars}`;
+}
+
+function getOtherActorsString (actor, allActors) {
 	//remove current actor from array of actors
 	allActors.splice(allActors.indexOf(actor), 1);
 	//reduce array to string separated by commas
@@ -24,21 +32,10 @@ function getOutput (actorName, movies) {
 	
 	let body = '';
 	for (let i = 0; i < movies.length; i++) {
-		let m = movies[i];
-		m.stars = otherActorsString(actorName, m.stars);
+		movies[i].stars = getOtherActorsString(actorName, movies[i].stars);
 		body += '\n\n';
-		body += `Title: ${m.title} (${m.releaseYear})
-Directed By: ${m.director}
-Also Starring: ${m.stars}`;
+		body += getMovieTemplate(movies[i]);					
 	}
-	
-// 	let fullBody = movies.reduce((body, movie) => {
-// 		let stars = otherActorsString(actorName, movie.stars);
-// 		let template = `Title: ${movie.title} (${movie.releaseYear})
-// Directed By: ${movie.director}
-// Also Starring: ${stars}`;
-// 		return body + template + '\n\n';
-// 	})
 	
 	return header + body;
 }

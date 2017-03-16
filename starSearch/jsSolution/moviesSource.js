@@ -1,55 +1,57 @@
 "use strict";
 
-const actorsObj = {};
-const movies = {};
+const labels = ["title", "releaseYear", "director", "stars"];
+const starsObject = {};
 
-function buildMoviesArray (moviesArray, labels) {
-	//const movies = [];
-	let currMovie = {};
-	let counter = 0;
+function updateStarSchema (stars, movieId) {
+	for (let star of stars) {
+		if (!starsObject[star]) starsObject[star] = [];
+		starsObject[star].push(movieId);
+	}
+}
+
+function makeMovieObject (currMovieData, movieId) {
+	const movie = {};
+	let i = 0;
+	for (let label of labels) {
+		//if element is star data
+		if (label === 'stars') {
+			//convert comma separated string to array
+			currMovieData[i] = currMovieData[i].split(", ");
+			
+			//add current movieId to the stars schema
+			updateStarSchema(currMovieData[i], movieId);
+		} 
+		movie[label] = currMovieData[i];
+		i++;
+	}
+	//console.log("movie:", movie);
+	return movie;
+}
+
+function makeMovieSchema (flatMovieData) {
+	const movies = {};
 	let movieId = 0;
-
-	for (let i = 0; i < moviesArray.length; i++) {
-		//if (/^\r$/.test(moviesArray[i])) {
-		if (counter >= labels.length) {
-			movies[movieId] = currMovie;
-			movieId += 1;
-			currMovie = {};
-			counter = 0;
-		} else {
-			//TODO clean data before pushing (ie remove \r and other \ escapes)
-			//currMovie.push(moviesArray[i]);
-			if (labels[counter] === "stars") {
-				currMovie[labels[counter]] = [];
-				let stars = moviesArray[i].split(", "); //TODO dont loop through twice, splitting and building actors Obj
-				for (let j = 0; j < stars.length; j++) {
-					//console.log(util.inspect(stars[j]));
-					let actorsName= stars[j];
-
-
-					//create actors array of their movies if it doesn't exist
-					if (actorsObj[actorsName] == undefined) {
-						actorsObj[actorsName] = [];
-					}
-
-					actorsObj[actorsName].push(movieId);
-					currMovie[labels[counter]].push(actorsName);
-				}
-				
-			} else {
-				currMovie[labels[counter]] = moviesArray[i];
-			}
-			counter += 1;
-		}
-		movies[movieId] = currMovie;
+	while (flatMovieData.length > 0) {
+		let currMovieChunk = flatMovieData.splice(0, labels.length);
+		//console.log("currData:", currMovieChunk);
+		movies[movieId] = makeMovieObject(currMovieChunk, movieId);
+		movieId++;
+		//if we have an extra space between movies, remove it from array before getting next chunk of data
+		flatMovieData.splice(0,1);
 	}
 
+	return movies;
+}
+
+function makeMovieAndStarSchema (flatMovieData) {
 	return {
-		actors: actorsObj,
-		movies: movies
+		movies: makeMovieSchema(flatMovieData),
+		actors: starsObject
 	};
 }
 
+
 module.exports = {
-	buildMoviesArray
+	makeMovieAndStarSchema
 };
