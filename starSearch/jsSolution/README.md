@@ -19,29 +19,30 @@ We use two data structures to help us find the results quickly:
 
 1. Movies Object - As we parse the data from the file, we create an object for each movie, such as:
 
-				movie = {
-					title: "Ocean's Eleven",
-					yearReleased: "2001",
-					director: "Steven Soderbergh",
-					starsList: ["George Clooney", "Brad Pitt", "Matt Damon"]
-				};
+		movie = {
+			title: "Ocean's Eleven",
+			yearReleased: "2001",
+			director: "Steven Soderbergh",
+			starsList: ["George Clooney", "Brad Pitt", "Matt Damon"]
+		};
 
 	Each movie is then stored in the movies object by it's movieId, so movie object ends up looking like:
    
-		    movies = {           
-		      0: {title: "Ocean's Eleven", releaseYear: "2001", ... },
-		      1: {title: "Star Wars: Episode IV - A New Hope", releaseYear: "1977", ... },
-		      ...
-		    };
-
-2. Stars MovieId Map - As we parse the data from the file, we also create an object to store each star's movies that they have appeared in using the movieIds. So the stars movieID map will look like: 
-    starsMovieIds = {    
-      "George Clooney": [0],
-      "Brad Pitt": [0],
-      "Matt Damon": [0, 2, 3],
-      "Mark Hamill": [1]
+    movies = {           
+      0: {title: "Ocean's Eleven", releaseYear: "2001", ... },
+      1: {title: "Star Wars: Episode IV - A New Hope", releaseYear: "1977", ... },
       ...
     };
+
+2. Stars MovieId Map - As we parse the data from the file, we also create an object to store each star's movies that they have appeared in using the movieIds. So the stars movieID map will look like: 
+    
+		starsMovieIds = {    
+		  "George Clooney": [0],
+		  "Brad Pitt": [0],
+		  "Matt Damon": [0, 2, 3],
+		  "Mark Hamill": [1]
+		  ...
+		};
 
 We create the second object so that when we want to look up what movies an actor has appeared in there is no iteration. We get the movieId's out of the Stars MovieId Map and then get the movies out of the Movies Object based on the movieId.
 
