@@ -1,9 +1,9 @@
 ## Installation
 
-#Install Node and npm
+### Install Node and npm
 In order to run this script from the command line you will need Node and npm. If you do not have Node already installed, you can download it from [here](https://nodejs.org/en/). A version of npm gets installed automatically with Node but if you would like to ensure you have the latest version of npm you can follow the instructions [here](https://docs.npmjs.com/getting-started/installing-node).
 
-#Install Mocha
+### Install Mocha
 This script uses Mocha for automated unit testing. If you do not have Mocha installed, run `npm install` from the root directory of this project in the command line. 
 
 
@@ -18,12 +18,12 @@ To run the tests, enter into the command line `npm test`.
 We use two data structures to help us find the results quickly:
 
 1. Movies Object - As we parse the data from the file, we create an object for each movie, such as:
-    movie = {
-    	title: "Ocean's Eleven",
-    	yearReleased: "2001",
-    	director: "Steven Soderbergh",
-    	starsList: ["George Clooney", "Brad Pitt", "Matt Damon"]
-    };
+		movie = {
+			title: "Ocean's Eleven",
+			yearReleased: "2001",
+			director: "Steven Soderbergh",
+			starsList: ["George Clooney", "Brad Pitt", "Matt Damon"]
+		};
 
 	Each movie is then stored in the movies object by it's movieId, so movie object ends up looking like:
     movies = {           
