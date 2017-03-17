@@ -28,11 +28,11 @@ We use two data structures to help us find the results quickly:
 
 	Each movie is then stored in the movies object by it's movieId, so movie object ends up looking like:
    
-    movies = {           
-      0: {title: "Ocean's Eleven", releaseYear: "2001", ... },
-      1: {title: "Star Wars: Episode IV - A New Hope", releaseYear: "1977", ... },
-      ...
-    };
+	    movies = {           
+	      0: {title: "Ocean's Eleven", releaseYear: "2001", ... },
+	      1: {title: "Star Wars: Episode IV - A New Hope", releaseYear: "1977", ... },
+	      ...
+	    };
 
 2. Stars MovieId Map - As we parse the data from the file, we also create an object to store each star's movies that they have appeared in using the movieIds. So the stars movieID map will look like: 
     
