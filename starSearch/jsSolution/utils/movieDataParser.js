@@ -1,9 +1,11 @@
 "use strict";
 
 const labels = ["title", "releaseYear", "director", "starsList"];
-const numOfRowsPerMovie = labels.length;
-const numOfRowsBetweenMovies = 1;
+const numOfLinesPerMovie = labels.length;
+const numOfLinesBetweenMovies = 1;
 
+
+//add stars and their movies (by movieIds) to the starsMovieIds object
 function updateStarsMovieIds (stars, movieId, starsMovieIds) {
 	for (let star of stars) {
 		if (!starsMovieIds[star]) starsMovieIds[star] = [];	//create array for star if doesn't already exist
@@ -35,12 +37,17 @@ function makeMovieDataObjects (flatMovieData) {
 	const moviesObject = {};
 	let movieId = 0;
 
-	while (flatMovieData.length > 0) {
-		let currMovieChunk = flatMovieData.splice(0, numOfRowsPerMovie);
-		moviesObject[movieId] = createMovie(currMovieChunk, movieId, starsMovieIds);
-		movieId++;
+	while (flatMovieData.length > 0) { //loop through entire flat data array
+		//remove movie chunk, size of chunk is determined by number of labels
+		let movieDataChunk = flatMovieData.splice(0, numOfLinesPerMovie);	
+		
+		//create movie object from movie chunk and store in the movies object based on the movieId
+		moviesObject[movieId] = createMovie(movieDataChunk, movieId, starsMovieIds);	
+
+		movieId++;	//increment for next movie object to be created
+
 		//if we have an extra space between moviesObject, remove it from array before getting next chunk of data
-		flatMovieData.splice(0, numOfRowsBetweenMovies);
+		flatMovieData.splice(0, numOfLinesBetweenMovies);
 	}
 
 	return {

@@ -1,35 +1,22 @@
 "use strict";
-const fs = require("fs");
-const main = require("./main.js");
 
-const fileName = "./movies.txt";
+const main = require("./main.js");
+const fileName = "./data/movies.txt";
 const firstName = process.argv[2] || "";
 const lastName = process.argv[3] || "";
 const starName = lastName === "" ? firstName : firstName + " " + lastName;
 
-
-
-function readMovieSource (file, name, getResults) {
-  fs.readFile(file, 'utf8', function(err, data) {
-    if (err) throw err;
-    const results = getResults(data, name);
-    if (results != undefined) {
-    	console.log(results);
-    }
-  });
+function onOutputGenerated (output) {
+	console.log(output);
 }
 
-function start (callback) {
+function start () {
   if (starName === "") {
     console.log("Please provide a name to search");
     return; 
   }
-  readMovieSource(fileName, starName, callback);
+  main.readMovieSource(fileName, starName, main.onMovieDataReceived, onOutputGenerated);
 }
 
-start(main.onMovieDataReceived);
+start();
 
-module.exports = {
-	readMovieSource,
-	start
-};

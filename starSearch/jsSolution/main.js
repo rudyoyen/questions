@@ -1,9 +1,8 @@
 "use strict";
 
-const util = require("util"); 
-const movieDataParser = require("./movieDataParser.js");
-const outputBuilder = require("./outputBuilder.js");
-
+const fs = require("fs");
+const movieDataParser = require("./utils/movieDataParser.js");
+const outputBuilder = require("./utils/outputBuilder.js");
 
 function cleanAndSplitData (data) {
   //remove all return characters then split string into array so that each line is an element
@@ -26,21 +25,6 @@ function onMovieDataReceived (rawData, starName) {
   const flatMovieArray = cleanAndSplitData(rawData);
   
   //Parse the flat movie array to build two movie data objects:
-  /**************************************************************************** 
-  movieData = {
-    movies: {           <--contains all movies, keys are movieIds and values are movie objects
-      0: {title: Ocean's Eleven, releaseYear: 2001, ... },
-      1: {title: Star Wars: Episode IV - A New Hope, releaseYear: 1977, ... },
-      ...
-    }, 
-    starsMovieIds: {    <--maps the stars with the movies they appeared using movieIds
-      ...
-      "Matt Damon": [0, 2, 3],
-      "Mark Hamill": [1]
-      ...
-    }
-  }
-  ****************************************************************************/
   const movieData = movieDataParser.makeMovieDataObjects(flatMovieArray);
 
   //get array of matching movies based on the star's movie ids
@@ -52,10 +36,19 @@ function onMovieDataReceived (rawData, starName) {
   return output;
 } 
 
+function readMovieSource (file, name, onDataReceived, onOutputGenerated) {
+  fs.readFile(file, 'utf8', function(err, data) {
+    if (err) throw err;
+    const output = onDataReceived(data, name); //pass raw data and name to onMovieDataReceived
+    onOutputGenerated(output);
+  });
+}
+
 
 module.exports = {
   cleanAndSplitData,
   findStarsMovies,
-  onMovieDataReceived
+  onMovieDataReceived,
+  readMovieSource
 }
 

@@ -1,27 +1,27 @@
 const assert = require('assert');
-const utils = require('./utils.js');
-const movies = require('../movies.js');
+const utils = require('./testSampleData.js');
 const main = require('../main.js');
-const movieDataParser = require('../movieDataParser.js');
-const outputBuilder = require('../outputBuilder.js');
+const movieDataParser = require('../utils/movieDataParser.js');
+const outputBuilder = require('../utils/outputBuilder.js');
+const sourceFile = "./data/movies.txt"
 
 
-
-describe('movies.js', function () {
-  describe('readMovieSource', function() {
+describe('main.js', function() {
+	describe('readMovieSource', function() {
   	let fileSuccessfullyRead = false;
   	let actualRawData;
   	let actualName;
   	let expectedName = "starName";
 
   	before(function (done) {
-  		function onSuccess (data, name) {
+  		function onDataReceived (data, name) {
   			fileSuccessfullyRead = true;
   			actualRawData = data;
   			actualName = name;
   			done();
   		}
-  		movies.readMovieSource("./movies.txt", expectedName, onSuccess);
+  		function onOutput () {}
+  		main.readMovieSource(sourceFile, expectedName, onDataReceived, onOutput);
   	});
   		
     it('should read the source file without error', function() { 
@@ -36,16 +36,6 @@ describe('movies.js', function () {
     });
   });
 
-  // describe('start', function() {
-  //   it('should return error message if no name is passed in', function() {
-  //     const actual = movies.start(null, "", null);
-  //     const expected = "Please provide a name to search";
-  //     assert.equal(actual, expected);
-  //   });
-  // });
-});
-
-describe('main.js', function() {
   describe('findStarsMovies', function () {
   	it('should return empty array if no movies match', function() { 
     	const actualOutput = main.findStarsMovies("badName", utils.moviesData).length;
