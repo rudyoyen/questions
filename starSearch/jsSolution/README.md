@@ -18,19 +18,21 @@ To run the tests, enter into the command line `npm test`.
 We use two data structures to help us find the results quickly:
 
 1. Movies Object - As we parse the data from the file, we create an object for each movie, such as:
-		movie = {
-			title: "Ocean's Eleven",
-			yearReleased: "2001",
-			director: "Steven Soderbergh",
-			starsList: ["George Clooney", "Brad Pitt", "Matt Damon"]
-		};
+
+				movie = {
+					title: "Ocean's Eleven",
+					yearReleased: "2001",
+					director: "Steven Soderbergh",
+					starsList: ["George Clooney", "Brad Pitt", "Matt Damon"]
+				};
 
 	Each movie is then stored in the movies object by it's movieId, so movie object ends up looking like:
-    movies = {           
-      0: {title: "Ocean's Eleven", releaseYear: "2001", ... },
-      1: {title: "Star Wars: Episode IV - A New Hope", releaseYear: "1977", ... },
-      ...
-    };
+   
+		    movies = {           
+		      0: {title: "Ocean's Eleven", releaseYear: "2001", ... },
+		      1: {title: "Star Wars: Episode IV - A New Hope", releaseYear: "1977", ... },
+		      ...
+		    };
 
 2. Stars MovieId Map - As we parse the data from the file, we also create an object to store each star's movies that they have appeared in using the movieIds. So the stars movieID map will look like: 
     starsMovieIds = {    
