@@ -4,51 +4,53 @@ const labels = ["title", "releaseYear", "director", "starsList"];
 const numOfRowsPerMovie = labels.length;
 const numOfRowsBetweenMovies = 1;
 
-function updateStarSchema (stars, movieId, starsObject) {
+function updateStarsMovieIds (stars, movieId, starsMovieIds) {
 	for (let star of stars) {
-		if (!starsObject[star]) starsObject[star] = [];	//create array for star if doesn't already exist
-		starsObject[star].push(movieId);	//push movie id into the star's array
+		if (!starsMovieIds[star]) starsMovieIds[star] = [];	//create array for star if doesn't already exist
+		starsMovieIds[star].push(movieId);	//push movie id into the star's array
 	}
 }
 
-function createMovieObject (currMovieData, movieId, starsObject) {
+function createMovie (movieData, movieId, starsMovieIds) {
 	const movie = {};
 
 	labels.forEach((label, index) => {
 		//if element is list of stars
 		if (label === 'starsList') {
 			//convert comma separated string to array
-			currMovieData[index] = currMovieData[index].split(", ");
+			movieData[index] = movieData[index].split(", "); 
 			
 			//add current movieId to the stars object
-			updateStarSchema(currMovieData[index], movieId, starsObject);
+			updateStarsMovieIds(movieData[index], movieId, starsMovieIds);
 		} 
 		//add new property to movie object
-		movie[label] = currMovieData[index];
+		movie[label] = movieData[index];
 	});
 
 	return movie;
 }
 
 function makeMovieDataObjects (flatMovieData) {
-	const starsObject = {};
+	const starsMovieIds = {};
 	const moviesObject = {};
 	let movieId = 0;
 
 	while (flatMovieData.length > 0) {
 		let currMovieChunk = flatMovieData.splice(0, numOfRowsPerMovie);
-		moviesObject[movieId] = createMovieObject(currMovieChunk, movieId, starsObject);
+		moviesObject[movieId] = createMovie(currMovieChunk, movieId, starsMovieIds);
 		movieId++;
 		//if we have an extra space between moviesObject, remove it from array before getting next chunk of data
 		flatMovieData.splice(0, numOfRowsBetweenMovies);
 	}
 
 	return {
-		movies: moviesObject,
-		starsMovieIds: starsObject
+		movies: moviesObject,	//object of all movies where keys are movieIds and values are movie objects
+		starsMovieIds: starsMovieIds	//map of the stars names and arrays of the movies they appeared in based on movieId
 	};
 }
 
 module.exports = {
+	updateStarsMovieIds,
+	createMovie,
 	makeMovieDataObjects
 };

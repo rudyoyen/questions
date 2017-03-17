@@ -2,7 +2,8 @@ const assert = require('assert');
 const utils = require('./utils.js');
 const movies = require('../movies.js');
 const main = require('../main.js');
-const movieDataBuilder = require('../movieDataBuilder.js');
+const movieDataParser = require('../movieDataParser.js');
+const outputBuilder = require('../outputBuilder.js');
 
 
 
@@ -45,44 +46,17 @@ describe('movies.js', function () {
 });
 
 describe('main.js', function() {
-  describe('removeReturnCharacters', function() {
-    it('should return a string with no \\r characters', function() {
-      const rawData = 'Ocean\'s Eleven\r\n2001\r\nSteven Soderbergh\r\nGeorge Clooney, Brad Pitt, Matt Damon\r\n';
-      const cleanData = main.removeReturnCharacters(rawData);
-      assert.equal(cleanData.search(/\r/), -1);
-    });
-  });
-
-  describe('splitOnNewLine', function() {
-    const rawData = 'Ocean\'s Eleven\n2001\nSteven Soderbergh\nGeorge Clooney, Brad Pitt, Matt Damon\n';
-    const cleanData = main.splitOnNewLine(rawData);
-
-    it('should return array with one element for each new line', function() {
-      assert.equal(cleanData.length, 5);
-    });
-
-    it('each element should have 0 \\n characters', function() {
-      const newlineCharCount = cleanData.reduce((acc, newLine) => {
-        return newLine.search(/\n/);
-      }, 0);
-      assert.equal(newlineCharCount, -1);
-    });
-
-  });
-
   describe('findStarsMovies', function () {
   	it('should return empty array if no movies match', function() { 
     	const actualOutput = main.findStarsMovies("badName", utils.moviesData).length;
     	const expectedOutput = 0;
 	   	assert.equal(actualOutput, expectedOutput);
     });
-
     it('should return an array with one element if there is one matching movie', function() { 
     	const actualOutput = main.findStarsMovies("George Clooney", utils.moviesData).length;
     	const expectedOutput = 1;
 	   	assert.equal(actualOutput, expectedOutput);
     });
-
     it('should return an array with at least one element if there is more than one matching movie', function() { 
     	const actualOutput = main.findStarsMovies("Matt Damon", utils.moviesData).length;
     	const expectedOutput = 3;
@@ -97,26 +71,116 @@ describe('main.js', function() {
     	const expectedOutput = utils.output[starName];
 	   	assert.equal(actualOutput, expectedOutput);
     });
-
     it('should correctly return results for a star with two movies', function() { 
     	const starName = "Tom Hanks";
     	const actualOutput = main.onMovieDataReceived(utils.rawData, starName);
     	const expectedOutput = utils.output[starName];
 	   	assert.equal(actualOutput, expectedOutput);
     });
-
     it('should correctly return results for a star with one movie', function() { 
     	const starName = "Carrie Fisher";
     	const actualOutput = main.onMovieDataReceived(utils.rawData, starName);
     	const expectedOutput = utils.output[starName];
 	   	assert.equal(actualOutput, expectedOutput);
     });
-
 		it('should correctly return results for a star with one word name and no movies', function() { 
     	const starName = "oneWrongName";
     	const actualOutput = main.onMovieDataReceived(utils.rawData, starName);
     	const expectedOutput = "0 Movies Featuring oneWrongName";
 	   	assert.equal(actualOutput, expectedOutput);
     });    
+  });
+});
+
+describe('movieDataParser.js', function() {	
+	describe('updateStarsMovieIds', function() {
+		const starsMovieIds = {};
+		movieDataParser.updateStarsMovieIds([ 'George Clooney', 'Brad Pitt', 'Matt Damon' ], 0, starsMovieIds);
+    
+    it('should add new star property starsMovieIds if star is not already included', function() {     
+      const actual = Object.keys(starsMovieIds).length;
+      const expected = 3;
+      assert.equal(actual, expected);
+    });
+    it('should add another movie id to a star\'s existing movie ids array', function() {
+    	movieDataParser.updateStarsMovieIds([ 'Matt Damon' ], 1, starsMovieIds);
+      const actual = Object.keys(starsMovieIds['Matt Damon']).length;
+      const expected = 2;
+      assert.equal(actual, expected);
+    });
+  });
+
+	describe('makeMovieDataObjects', function () {
+		const movieData = movieDataParser.makeMovieDataObjects(utils.flatMovieData);
+		it('should return a defined object', function () {
+			const actual = movieData != undefined;
+			const expected = true;
+			assert.equal(actual, expected);
+		});
+		it('should have a movies property', function () {
+			const actual = movieData.movies != undefined;
+			const expected = true;
+			assert.equal(actual, expected);
+		});
+		it('should have a movie with a title property', function () {
+			const actual = movieData.movies[0].title != undefined;
+			const expected = true;
+			assert.equal(actual, expected);
+		});
+		it('should have a movie with a releaseYear property', function () {
+			const actual = movieData.movies[0].releaseYear != undefined;
+			const expected = true;
+			assert.equal(actual, expected);
+		});
+		it('should have a movie with a director property', function () {
+			const actual = movieData.movies[0].director != undefined;
+			const expected = true;
+			assert.equal(actual, expected);
+		});
+		it('should have a movie with a starsList property', function () {
+			const actual = movieData.movies[0].starsList != undefined;
+			const expected = true;
+			assert.equal(actual, expected);
+		});
+		it('should have a starsMovieIds property', function () {
+			const actual = movieData.starsMovieIds != undefined;
+			const expected = true;
+			assert.equal(actual, expected);
+		});
+		it('should have a star with a movieId array property', function () {
+			const actual = Array.isArray(movieData.starsMovieIds["George Clooney"]);
+			const expected = true;
+			assert.equal(actual, expected);
+		});
+	});
+});
+
+
+describe('outputBuilder.js', function() {
+	describe('getOutput', function() {		
+    it('should return correctly formatted results for three movies', function() { 
+    	const starName = "Matt Damon";   
+      const actual = outputBuilder.getOutput(starName, utils.matchingMovies[starName]); 
+      const expected = utils.output[starName];
+      assert.equal(actual, expected);
+    });
+    it('should return correctly formatted results for two movies', function() { 
+    	const starName = "Tom Hanks";   
+      const actual = outputBuilder.getOutput(starName, utils.matchingMovies[starName]); 
+      const expected = utils.output[starName];
+      assert.equal(actual, expected);
+    });
+    it('should return correctly formatted results for one movie', function() { 
+    	const starName = "Carrie Fisher";   
+      const actual = outputBuilder.getOutput(starName, utils.matchingMovies[starName]); 
+      const expected = utils.output[starName];
+      assert.equal(actual, expected);
+    });
+  	it('should return correctly formatted results for zero movies', function() { 
+    	const starName = "no name";   
+      const actual = outputBuilder.getOutput(starName, []); 
+      const expected = "0 Movies Featuring no name";
+      assert.equal(actual, expected);
+    });
   });
 });

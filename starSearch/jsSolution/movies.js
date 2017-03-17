@@ -19,15 +19,15 @@ function readMovieSource (file, name, getResults) {
   });
 }
 
-function start (file, name, callback) {
-  if (name === "") {
+function start (callback) {
+  if (starName === "") {
     console.log("Please provide a name to search");
     return; 
   }
-  readMovieSource(file, name, callback);
+  readMovieSource(fileName, starName, callback);
 }
 
-start(fileName, starName, main.onMovieDataReceived);
+start(main.onMovieDataReceived);
 
 module.exports = {
 	readMovieSource,

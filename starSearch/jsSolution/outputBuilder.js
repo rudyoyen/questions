@@ -19,9 +19,11 @@ function getOtherStarsString (star, starsList) {
 }
 
 function getOutput (starName, movies) {
+	//create header 
 	const s = movies.length !== 1 ? "s" : "";
 	const header = `${movies.length} Movie${s} Featuring ${starName}`;
 	
+	//create results body, loop through each movie and append to body
 	let body = '';
 	for (let movie of movies) {
 		movie.starsList = getOtherStarsString(starName, movie.starsList);
