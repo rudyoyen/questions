@@ -36,3 +36,4 @@ function getOutput (starName, movies) {
 module.exports = {
 	getOutput
 };
+

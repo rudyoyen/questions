@@ -145,7 +145,6 @@ describe('movieDataParser.js', function() {
 	});
 });
 
-
 describe('outputBuilder.js', function() {
 	describe('getOutput', function() {		
     it('should return correctly formatted results for three movies', function() { 

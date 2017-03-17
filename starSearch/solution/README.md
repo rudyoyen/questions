@@ -1,10 +1,10 @@
 ## Installation
 
 ### Install Node and npm
-In order to run this script from the command line you will need Node and npm. If you do not have Node already installed, you can download it from [here](https://nodejs.org/en/). A version of npm gets installed automatically with Node but if you would like to ensure you have the latest version of npm you can follow the instructions [here](https://docs.npmjs.com/getting-started/installing-node).
+In order to run this script from the command line you will need Node and npm. If you do not have Node already installed, you can download it from [here](https://nodejs.org/en/). A version of npm is installed automatically with Node but if you would like to ensure you have the latest version of npm you can follow the instructions [here](https://docs.npmjs.com/getting-started/installing-node).
 
 ### Install Mocha
-This script uses Mocha for automated unit testing. If you do not have Mocha installed, run `npm install` from the root directory of this project in the command line. 
+This script uses Mocha for automated unit testing. If you do not have Mocha installed, run `npm install` from the root directory of this project before running the tests. 
 
 
 ## Run the program
@@ -34,7 +34,7 @@ We use two data structures to help us find the results quickly:
 	      ...
 	    };
 
-2. Stars MovieId Map - As we parse the data from the file, we also create an object to store each star's movies that they have appeared in using the movieIds. So the stars movieID map will look like: 
+2. Stars MovieId Map - As we parse the data from the file, we also create an object to store each star's movies using the movieId. So the stars movieID map will look like: 
     
 		starsMovieIds = {    
 		  "George Clooney": [0],
@@ -45,5 +45,6 @@ We use two data structures to help us find the results quickly:
 		};
 
 We create the second object so that when we want to look up what movies an actor has appeared in there is no iteration. We get the movieId's out of the Stars MovieId Map and then get the movies out of the Movies Object based on the movieId.
+
 
 
